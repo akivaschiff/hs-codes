@@ -1,27 +1,115 @@
 <template>
-  <div class="space-y-6">
-    <!-- Code Builder Display -->
-    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-200 shadow-sm">
-      <div class="flex items-center justify-between mb-2">
-        <h3 class="text-sm font-medium text-gray-600">Building HS Code</h3>
-        <button
-          v-if="selectedPath.length > 0"
-          @click="clearSelection"
-          class="text-xs text-blue-600 hover:text-blue-800 font-medium"
-        >
-          Clear
-        </button>
-      </div>
-      <div class="flex items-center space-x-2 min-h-[2.5rem]">
-        <span class="text-3xl font-bold text-gray-800 font-mono">
-          {{ currentCode || '—' }}
-        </span>
-        <div v-if="selectedPath.length > 0" class="flex-1 ml-4">
-          <div class="text-sm text-gray-600">
-            {{ currentDescription }}
+  <div class="space-y-6 relative">
+    <!-- Backdrop Overlay -->
+    <div
+      v-if="selectedPath.length > 0"
+      @click="clearSelection"
+      class="fixed inset-0 z-40 transition-opacity"
+      style="background-color: rgba(0, 0, 0, 0.3);"
+    ></div>
+
+    <!-- Side Panel -->
+    <div
+      class="fixed top-0 right-0 h-full w-[480px] bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out"
+      :class="selectedPath.length > 0 ? 'translate-x-0' : 'translate-x-full'"
+    >
+      <div class="h-full flex flex-col">
+        <!-- Panel Header -->
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-sm font-medium opacity-90">Your Selected HS Code</h3>
+              <div class="text-4xl font-bold font-mono mt-2">{{ currentCode }}</div>
+            </div>
+            <button
+              @click="clearSelection"
+              class="text-white hover:text-gray-200 transition-colors p-1"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
-          <div class="text-xs text-gray-500 mt-1">
-            {{ breadcrumb }}
+          <p class="text-sm text-blue-100 mt-2">{{ currentDescription }}</p>
+        </div>
+
+        <!-- Panel Content -->
+        <div class="flex-1 overflow-y-auto p-6">
+          <div class="space-y-6">
+            <!-- What is this section -->
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
+              <h4 class="text-sm font-semibold text-blue-900 mb-2">💡 Understanding HS Codes</h4>
+              <p class="text-sm text-blue-800">
+                HS (Harmonized System) codes classify products in international trade. Each level gets more specific, from broad categories to exact products.
+              </p>
+            </div>
+
+            <!-- Hierarchy Breakdown -->
+            <div>
+              <h4 class="text-base font-bold text-gray-900 mb-4">How This Code Was Built</h4>
+              <div class="space-y-4">
+                <!-- Level 1: Section -->
+                <div v-if="selectedPath[0]" class="border-l-4 border-purple-400 pl-4">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xs font-bold text-purple-600 uppercase tracking-wide">Level 1 • Section</span>
+                  </div>
+                  <p class="text-sm font-medium text-gray-900">{{ getSectionName(selectedPath[0].description) }}</p>
+                  <p class="text-xs text-gray-500 mt-1">Broadest category - one of 21 major product groups</p>
+                </div>
+
+                <!-- Level 2: Chapter -->
+                <div v-if="selectedPath[1]" class="border-l-4 border-blue-400 pl-4">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xs font-bold text-blue-600 uppercase tracking-wide">Level 2 • Chapter</span>
+                    <span class="text-xs font-mono font-semibold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">{{ getChapterCode(selectedPath[1].description) }}</span>
+                  </div>
+                  <p class="text-sm font-medium text-gray-900">{{ getChapterName(selectedPath[1].description) }}</p>
+                  <p class="text-xs text-gray-500 mt-1">First 2 digits - narrows down the product type</p>
+                </div>
+
+                <!-- Level 3: Heading -->
+                <div v-if="selectedPath[2]" class="border-l-4 border-green-400 pl-4">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xs font-bold text-green-600 uppercase tracking-wide">Level 3 • Heading</span>
+                    <span class="text-xs font-mono font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded">{{ getHeadingCode(selectedPath[2].description) }}</span>
+                  </div>
+                  <p class="text-sm font-medium text-gray-900">{{ getHeadingName(selectedPath[2].description) }}</p>
+                  <p class="text-xs text-gray-500 mt-1">First 4 digits - more specific product category</p>
+                </div>
+
+                <!-- Level 4: Subheading -->
+                <div v-if="selectedPath[3]" class="border-l-4 border-orange-400 pl-4">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xs font-bold text-orange-600 uppercase tracking-wide">Level 4 • Subheading</span>
+                    <span class="text-xs font-mono font-semibold text-orange-700 bg-orange-100 px-2 py-0.5 rounded">{{ currentCode }}</span>
+                  </div>
+                  <p class="text-sm font-medium text-gray-900">{{ selectedPath[3].description }}</p>
+                  <p class="text-xs text-gray-500 mt-1">Full 6-digit code - the exact product classification</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Code Breakdown -->
+            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <h4 class="text-sm font-semibold text-gray-700 mb-3">Code Breakdown</h4>
+              <div class="font-mono text-2xl font-bold text-gray-900 mb-2">
+                <span class="text-blue-600">{{ currentCode.slice(0, 2) }}</span><span class="text-green-600">{{ currentCode.slice(2, 4) }}</span><span class="text-orange-600">{{ currentCode.slice(4, 6) }}</span>
+              </div>
+              <div class="space-y-1 text-xs">
+                <div class="flex items-center gap-2">
+                  <span class="w-12 h-3 bg-blue-400 rounded"></span>
+                  <span class="text-gray-600">Chapter (digits 1-2)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-12 h-3 bg-green-400 rounded"></span>
+                  <span class="text-gray-600">Heading (digits 3-4)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-12 h-3 bg-orange-400 rounded"></span>
+                  <span class="text-gray-600">Subheading (digits 5-6)</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -193,10 +281,10 @@
               </div>
             </div>
           </div>
-            </div>
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -458,6 +546,34 @@ const romanToInt = (roman) => {
     }
   }
   return result
+}
+
+// Helper functions to parse path descriptions
+const getSectionName = (desc) => {
+  // Format: "Section II: Vegetable Products"
+  return desc.split(': ')[1] || desc
+}
+
+const getChapterCode = (desc) => {
+  // Format: "Chapter 08: Fruit and nuts, edible; peel of citrus fruit or melons"
+  const match = desc.match(/Chapter (\d+):/)
+  return match ? match[1] : ''
+}
+
+const getChapterName = (desc) => {
+  // Format: "Chapter 08: Fruit and nuts, edible; peel of citrus fruit or melons"
+  return desc.split(': ')[1] || desc
+}
+
+const getHeadingCode = (desc) => {
+  // Format: "Heading 0808: Apples, pears and quinces; fresh"
+  const match = desc.match(/Heading (\d+):/)
+  return match ? match[1] : ''
+}
+
+const getHeadingName = (desc) => {
+  // Format: "Heading 0808: Apples, pears and quinces; fresh"
+  return desc.split(': ')[1] || desc
 }
 
 const toggleGroup = (groupName) => {
