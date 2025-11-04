@@ -155,20 +155,20 @@
             class="w-full flex items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition-colors border border-gray-200"
             :class="{'bg-blue-50 border-blue-300': expandedGroups.has(group.name)}"
           >
-            <div class="flex items-center space-x-3 flex-1">
-              <span class="text-2xl">{{ group.emoji }}</span>
-              <div class="text-left flex-1">
+            <div class="flex items-center space-x-3 flex-1 min-w-0">
+              <span class="text-2xl flex-shrink-0">{{ group.emoji }}</span>
+              <div class="text-left flex-1 min-w-0">
                 <div class="flex items-center justify-between">
-                  <div>
-                    <div class="font-semibold text-gray-900">{{ group.name }}</div>
-                    <div class="text-sm text-gray-600">{{ group.description }}</div>
+                  <div class="min-w-0 flex-1">
+                    <div class="font-semibold text-gray-900 break-words">{{ group.name }}</div>
+                    <div class="text-sm text-gray-600 break-words">{{ group.description }}</div>
                   </div>
-                  <div class="text-xs text-gray-500 ml-4">{{ group.sectionRange }}</div>
+                  <div class="text-xs text-gray-500 ml-4 flex-shrink-0">{{ group.sectionRange }}</div>
                 </div>
               </div>
             </div>
             <svg
-              class="w-5 h-5 text-gray-400 transition-transform ml-2"
+              class="w-5 h-5 text-gray-400 transition-transform ml-2 flex-shrink-0"
               :class="{'rotate-180': expandedGroups.has(group.name)}"
               fill="none"
               stroke="currentColor"
@@ -197,7 +197,7 @@
                   </div>
                 </div>
                 <svg
-                  class="w-5 h-5 text-gray-400 transition-transform ml-2"
+                  class="w-5 h-5 text-gray-400 transition-transform ml-2 flex-shrink-0"
                   :class="{'rotate-180': expandedSections.has(section.id)}"
                   fill="none"
                   stroke="currentColor"
@@ -226,7 +226,7 @@
                   </div>
                 </div>
                 <svg
-                  class="w-5 h-5 text-gray-400 transition-transform"
+                  class="w-5 h-5 text-gray-400 transition-transform flex-shrink-0"
                   :class="{'rotate-180': expandedChapters.has(chapter.hscode)}"
                   fill="none"
                   stroke="currentColor"
@@ -255,7 +255,7 @@
                       </div>
                     </div>
                     <svg
-                      class="w-5 h-5 text-gray-400 transition-transform"
+                      class="w-5 h-5 text-gray-400 transition-transform flex-shrink-0"
                       :class="{'rotate-180': expandedHeadings.has(heading.hscode)}"
                       fill="none"
                       stroke="currentColor"
