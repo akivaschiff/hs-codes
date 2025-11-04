@@ -119,7 +119,7 @@
     </div>
 
     <!-- Explorer Tree -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 w-full">
       <div class="p-4 border-b border-gray-200 bg-gray-50">
         <div class="flex items-center justify-between">
           <div>
@@ -179,19 +179,20 @@
           </button>
 
           <!-- Sections within group -->
-          <div v-if="expandedGroups.has(group.name)" class="ml-6 mt-2 space-y-2">
-            <div v-for="section in group.sections" :key="section.id" class="mb-2">
+          <Transition name="expand">
+            <div v-if="expandedGroups.has(group.name)" class="ml-6 mt-2 space-y-2">
+              <div v-for="section in group.sections" :key="section.id" class="mb-2">
               <button
                 @click="toggleSection(section.id)"
                 class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors border border-gray-200"
                 :class="{'bg-blue-50 border-blue-300': expandedSections.has(section.id)}"
               >
-                <div class="flex items-center space-x-3 flex-1">
-                  <span class="text-lg">{{ expandedSections.has(section.id) ? '📂' : '📁' }}</span>
-                  <div class="text-left flex-1">
+                <div class="flex items-center space-x-3 flex-1 min-w-0">
+                  <span class="text-lg flex-shrink-0">{{ expandedSections.has(section.id) ? '📂' : '📁' }}</span>
+                  <div class="text-left flex-1 min-w-0">
                     <div class="font-medium text-gray-900 flex items-center justify-between">
-                      <span class="text-sm text-gray-600">{{ section.description }}</span>
-                      <span class="text-xs text-gray-500 ml-2">Section {{ section.id }}</span>
+                      <span class="text-sm text-gray-600 break-words">{{ section.description }}</span>
+                      <span class="text-xs text-gray-500 ml-2 flex-shrink-0">Section {{ section.id }}</span>
                     </div>
                   </div>
                 </div>
@@ -207,19 +208,20 @@
               </button>
 
           <!-- Chapters -->
-          <div v-if="expandedSections.has(section.id)" class="ml-8 mt-2 space-y-2">
-            <div v-for="chapter in section.chapters" :key="chapter.hscode" class="mb-2">
+          <Transition name="expand">
+            <div v-if="expandedSections.has(section.id)" class="ml-8 mt-2 space-y-2">
+              <div v-for="chapter in section.chapters" :key="chapter.hscode" class="mb-2">
               <button
                 @click="toggleChapter(chapter.hscode)"
                 class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors border border-gray-200"
                 :class="{'bg-blue-50 border-blue-300': expandedChapters.has(chapter.hscode)}"
               >
-                <div class="flex items-center space-x-3">
-                  <span class="text-lg">{{ expandedChapters.has(chapter.hscode) ? '📖' : '📕' }}</span>
-                  <div class="text-left">
+                <div class="flex items-center space-x-3 flex-1 min-w-0">
+                  <span class="text-lg flex-shrink-0">{{ expandedChapters.has(chapter.hscode) ? '📖' : '📕' }}</span>
+                  <div class="text-left flex-1 min-w-0">
                     <div class="font-medium text-gray-900">
-                      <span class="font-mono bg-gray-100 px-2 py-0.5 rounded text-sm">{{ chapter.hscode }}</span>
-                      <span class="ml-2">{{ chapter.description }}</span>
+                      <span class="font-mono bg-gray-100 px-2 py-0.5 rounded text-sm flex-shrink-0">{{ chapter.hscode }}</span>
+                      <span class="ml-2 break-words">{{ chapter.description }}</span>
                     </div>
                   </div>
                 </div>
@@ -235,19 +237,20 @@
               </button>
 
               <!-- Headings -->
-              <div v-if="expandedChapters.has(chapter.hscode)" class="ml-8 mt-2 space-y-2">
-                <div v-for="heading in chapter.headings" :key="heading.hscode" class="mb-2">
+              <Transition name="expand">
+                <div v-if="expandedChapters.has(chapter.hscode)" class="ml-8 mt-2 space-y-2">
+                  <div v-for="heading in chapter.headings" :key="heading.hscode" class="mb-2">
                   <button
                     @click="toggleHeading(heading.hscode)"
                     class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors border border-gray-200"
                     :class="{'bg-blue-50 border-blue-300': expandedHeadings.has(heading.hscode)}"
                   >
-                    <div class="flex items-center space-x-3">
-                      <span class="text-base">{{ expandedHeadings.has(heading.hscode) ? '📄' : '📃' }}</span>
-                      <div class="text-left">
+                    <div class="flex items-center space-x-3 flex-1 min-w-0">
+                      <span class="text-base flex-shrink-0">{{ expandedHeadings.has(heading.hscode) ? '📄' : '📃' }}</span>
+                      <div class="text-left flex-1 min-w-0">
                         <div class="text-sm font-medium text-gray-900">
-                          <span class="font-mono bg-gray-100 px-2 py-0.5 rounded">{{ heading.hscode }}</span>
-                          <span class="ml-2">{{ heading.description }}</span>
+                          <span class="font-mono bg-gray-100 px-2 py-0.5 rounded flex-shrink-0">{{ heading.hscode }}</span>
+                          <span class="ml-2 break-words">{{ heading.description }}</span>
                         </div>
                       </div>
                     </div>
@@ -263,31 +266,36 @@
                   </button>
 
                   <!-- Subheadings (Final Level) -->
-                  <div v-if="expandedHeadings.has(heading.hscode)" class="ml-8 mt-2 space-y-1">
-                    <button
-                      v-for="subheading in heading.subheadings"
-                      :key="subheading.hscode"
-                      @click="selectSubheading(subheading)"
-                      class="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition-colors border border-gray-200 text-left"
-                      :class="{'bg-blue-100 border-blue-400': selectedCode === subheading.hscode}"
-                    >
-                      <span class="text-base">🏷️</span>
-                      <div class="flex-1">
-                        <div class="text-sm">
-                          <span class="font-mono bg-blue-100 px-2 py-0.5 rounded font-semibold text-blue-900">{{ subheading.hscode }}</span>
-                          <span class="ml-2 text-gray-800">{{ subheading.description }}</span>
+                  <Transition name="expand">
+                    <div v-if="expandedHeadings.has(heading.hscode)" class="ml-8 mt-2 space-y-1">
+                      <button
+                        v-for="subheading in heading.subheadings"
+                        :key="subheading.hscode"
+                        @click="selectSubheading(subheading)"
+                        class="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition-colors border border-gray-200 text-left"
+                        :class="{'bg-blue-100 border-blue-400': selectedCode === subheading.hscode}"
+                      >
+                        <span class="text-base flex-shrink-0">🏷️</span>
+                        <div class="flex-1 min-w-0">
+                          <div class="text-sm">
+                            <span class="font-mono bg-blue-100 px-2 py-0.5 rounded font-semibold text-blue-900 flex-shrink-0">{{ subheading.hscode }}</span>
+                            <span class="ml-2 text-gray-800 break-words">{{ subheading.description }}</span>
+                          </div>
                         </div>
-                      </div>
-                    </button>
+                      </button>
+                    </div>
+                  </Transition>
                   </div>
                 </div>
+              </Transition>
               </div>
             </div>
+          </Transition>
           </div>
-          </div>
+            </div>
+          </Transition>
         </div>
       </div>
-    </div>
     </div>
   </div>
 </template>
@@ -729,5 +737,38 @@ onMounted(() => {
   width: auto;
   vertical-align: middle;
   animation: sailBoat 6s ease-in-out infinite;
+}
+
+/* Expand/Collapse Transitions */
+.expand-enter-active {
+  animation: expand-in 0.2s ease-out;
+}
+
+.expand-leave-active {
+  animation: expand-out 0.15s ease-in;
+}
+
+@keyframes expand-in {
+  0% {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+  }
+  100% {
+    opacity: 1;
+    max-height: 2000px;
+  }
+}
+
+@keyframes expand-out {
+  0% {
+    opacity: 1;
+    max-height: 2000px;
+  }
+  100% {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+  }
 }
 </style>
