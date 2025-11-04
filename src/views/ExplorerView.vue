@@ -306,7 +306,7 @@ const expandedHeadings = ref(new Set())
 const selectedCode = ref('')
 const selectedPath = ref([])
 
-const currentCode = computed(() => selectedCode.value || '')
+const currentCode = computed(() => String(selectedCode.value || ''))
 const currentDescription = computed(() => {
   if (selectedPath.value.length === 0) return ''
   return selectedPath.value[selectedPath.value.length - 1].description
@@ -628,7 +628,7 @@ const toggleHeading = (hscode) => {
 }
 
 const selectSubheading = (subheading) => {
-  selectedCode.value = subheading.hscode
+  selectedCode.value = String(subheading.hscode)
 
   // Build the path
   const path = []
@@ -671,8 +671,24 @@ const clearSelection = () => {
 }
 
 const expandAll = () => {
+  // Expand all groups
   sectionGroups.value.forEach(group => {
     expandedGroups.value.add(group.name)
+
+    // Expand all sections in each group
+    group.sections.forEach(section => {
+      expandedSections.value.add(section.id)
+
+      // Expand all chapters in each section
+      section.chapters.forEach(chapter => {
+        expandedChapters.value.add(chapter.hscode)
+
+        // Expand all headings in each chapter
+        chapter.headings.forEach(heading => {
+          expandedHeadings.value.add(heading.hscode)
+        })
+      })
+    })
   })
 }
 
