@@ -39,9 +39,12 @@
             <!-- What is this section -->
             <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
               <h4 class="text-sm font-semibold text-blue-900 mb-2">💡 Understanding HS Codes</h4>
-              <p class="text-sm text-blue-800">
+              <p class="text-sm text-blue-800 mb-3">
                 HS (Harmonized System) codes classify products in international trade. Each level gets more specific, from broad categories to exact products.
               </p>
+              <div class="relative h-6">
+                <img src="/ship.png" alt="ship" class="boat-emoji" />
+              </div>
             </div>
 
             <!-- Hierarchy Breakdown -->
@@ -326,12 +329,46 @@ const loadData = async () => {
 }
 
 const buildHierarchy = () => {
+  // First pass: Create maps for efficient lookups
+  const chaptersMap = new Map() // key: hscode, value: chapter data
+  const headingsMap = new Map() // key: hscode, value: heading data
+  const subheadingsMap = new Map() // key: parent, value: array of subheadings
+
+  // Build maps
+  rawData.value.forEach(item => {
+    if (item.level === 2) {
+      chaptersMap.set(item.hscode, {
+        hscode: item.hscode,
+        description: item.description,
+        section: item.section,
+        headings: []
+      })
+    } else if (item.level === 4) {
+      headingsMap.set(item.hscode, {
+        hscode: item.hscode,
+        description: item.description,
+        parent: item.parent,
+        section: item.section,
+        subheadings: []
+      })
+    } else if (item.level === 6) {
+      if (!subheadingsMap.has(item.parent)) {
+        subheadingsMap.set(item.parent, [])
+      }
+      subheadingsMap.get(item.parent).push({
+        hscode: item.hscode,
+        description: item.description
+      })
+    }
+  })
+
+  // Second pass: Build hierarchy
   const sectionsMap = new Map()
 
-  rawData.value.forEach(item => {
-    const sectionId = item.section
+  // Add chapters to sections
+  chaptersMap.forEach((chapter, chapterCode) => {
+    const sectionId = chapter.section
 
-    // Initialize section if needed
     if (!sectionsMap.has(sectionId)) {
       sectionsMap.set(sectionId, {
         id: sectionId,
@@ -340,40 +377,22 @@ const buildHierarchy = () => {
       })
     }
 
-    const section = sectionsMap.get(sectionId)
+    sectionsMap.get(sectionId).chapters.push(chapter)
+  })
 
-    // Level 2: Chapters (2 digits)
-    if (item.level === 2) {
-      section.chapters.push({
-        hscode: item.hscode,
-        description: item.description,
-        headings: []
-      })
+  // Add headings to chapters
+  headingsMap.forEach((heading, headingCode) => {
+    const chapter = chaptersMap.get(heading.parent)
+    if (chapter) {
+      chapter.headings.push(heading)
     }
-    // Level 4: Headings (4 digits)
-    else if (item.level === 4) {
-      const chapter = section.chapters.find(c => c.hscode === item.parent)
-      if (chapter) {
-        chapter.headings.push({
-          hscode: item.hscode,
-          description: item.description,
-          subheadings: []
-        })
-      }
-    }
-    // Level 6: Subheadings (6 digits)
-    else if (item.level === 6) {
-      const parentStr = String(item.parent)
-      const chapter = section.chapters.find(c => parentStr.startsWith(c.hscode))
-      if (chapter) {
-        const heading = chapter.headings.find(h => h.hscode === parentStr)
-        if (heading) {
-          heading.subheadings.push({
-            hscode: item.hscode,
-            description: item.description
-          })
-        }
-      }
+  })
+
+  // Add subheadings to headings
+  subheadingsMap.forEach((subheadings, parentCode) => {
+    const heading = headingsMap.get(parentCode)
+    if (heading) {
+      heading.subheadings = subheadings
     }
   })
 
@@ -668,3 +687,31 @@ onMounted(() => {
   loadData()
 })
 </script>
+
+<style scoped>
+@keyframes sailBoat {
+  0% {
+    transform: translateX(0px) scaleX(1);
+  }
+  45% {
+    transform: translateX(60px) scaleX(1);
+  }
+  50% {
+    transform: translateX(60px) scaleX(-1);
+  }
+  95% {
+    transform: translateX(0px) scaleX(-1);
+  }
+  100% {
+    transform: translateX(0px) scaleX(1);
+  }
+}
+
+.boat-emoji {
+  display: inline-block;
+  height: 24px;
+  width: auto;
+  vertical-align: middle;
+  animation: sailBoat 6s ease-in-out infinite;
+}
+</style>
