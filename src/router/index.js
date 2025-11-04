@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ExplorerView from '../views/ExplorerView.vue'
-import LookupView from '../views/LookupView.vue'
-import GameView from '../views/GameView.vue'
 import SummaryView from '../views/SummaryView.vue'
 
 const router = createRouter({
@@ -15,16 +13,6 @@ const router = createRouter({
       path: '/explorer',
       name: 'explorer',
       component: ExplorerView
-    },
-    {
-      path: '/lookup',
-      name: 'lookup',
-      component: LookupView
-    },
-    {
-      path: '/game',
-      name: 'game',
-      component: GameView
     },
     {
       path: '/summary',
