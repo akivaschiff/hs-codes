@@ -1,0 +1,113 @@
+[
+	{
+		"id": "001.png",
+		"tag": "Fresh banana",
+		"image_search_term": "fresh yellow banana",
+		"hscodes": ["0803"]
+	},
+	{
+		"id": "002.jpg",
+		"tag": "Gold ring",
+		"image_search_term": "gold wedding ring",
+		"hscodes": ["711319"]
+	},
+	{
+		"id": "003.webp",
+		"tag": "Children's book",
+		"image_search_term": "children's picture book",
+		"hscodes": ["490191"]
+	},
+	{
+		"id": "004.jpeg",
+		"tag": "Aluminum soda can",
+		"image_search_term": "aluminum beverage can",
+		"hscodes": ["761290"]
+	},
+	{
+		"id": "005.webp",
+		"tag": "Bar of soap",
+		"image_search_term": "bar of hand soap",
+		"hscodes": ["340111"]
+	},
+	{
+		"id": "006.avif",
+		"tag": "Sunglasses",
+		"image_search_term": "black sunglasses",
+		"hscodes": ["900410"]
+	},
+	{
+		"id": "007.jpg",
+		"tag": "Cotton t-shirt",
+		"image_search_term": "plain cotton t-shirt",
+		"hscodes": ["610910"]
+	},
+	{
+		"id": "008.webp",
+		"tag": "Olive oil",
+		"image_search_term": "bottle of olive oil",
+		"hscodes": ["150910"]
+	},
+	{
+		"id": "009.jpg",
+		"tag": "Honey jar",
+		"image_search_term": "jar of natural honey",
+		"hscodes": ["040900"]
+	},
+	{
+		"id": "010.jpg",
+		"tag": "Paint can",
+		"image_search_term": "can of wall paint",
+		"hscodes": ["321000"]
+	},
+	{
+		"id": "011.jpg",
+		"tag": "Antibiotic pills",
+		"image_search_term": "antibiotic pills blister pack",
+		"hscodes": ["300420"]
+	},
+	{
+		"id": "012.jpg",
+		"tag": "Motorcycle helmet",
+		"image_search_term": "motorcycle safety helmet",
+		"hscodes": ["650610"]
+	},
+	{
+		"id": "013.jpg",
+		"tag": "Violin",
+		"image_search_term": "acoustic violin",
+		"hscodes": ["920510"]
+	},
+	{
+		"id": "014.jpeg",
+		"tag": "Wooden chair",
+		"image_search_term": "wooden dining chair",
+		"hscodes": ["940330"]
+	},
+	{
+		"id": "015.avif",
+		"tag": "Car tire",
+		"image_search_term": "car tire rubber",
+		"hscodes": ["401110"]
+	},
+	{
+		"id": "018.jpeg",
+		"tag": "Solar panel",
+		"image_search_term": "photovoltaic solar panel",
+		"error_message": "Photovoltaic cells and modules have specific classification (8541), distinct from general electrical generators",
+		"hscodes": ["854140"]
+	},
+	{
+		"id": "019.jpg",
+		"tag": "Camera drone",
+		"image_search_term": "quadcopter camera drone",
+		"error_message": "Small consumer drones are typically classified as aircraft (8806), not toys (9503), even if used recreationally",
+		"hscodes": ["880690"]
+	},
+	{
+		"id": "020.webp",
+		"tag": "LED light bulb",
+		"image_search_term": "LED light bulb",
+		"error_message": "LED lamps have their own classification (8539), distinct from traditional incandescent or fluorescent bulbs",
+		"hscodes": ["853921"]
+	}
+]
