@@ -19,7 +19,7 @@
 	},
 	{
 		"id": "004.jpeg",
-		"tag": "Aluminum soda can",
+		"tag": "Coca Cola can",
 		"image_search_term": "aluminum beverage can",
 		"hscodes": ["761290"]
 	},
@@ -45,7 +45,7 @@
 		"id": "008.webp",
 		"tag": "Olive oil",
 		"image_search_term": "bottle of olive oil",
-		"hscodes": ["150910"]
+		"hscodes": ["1509"]
 	},
 	{
 		"id": "009.jpg",
@@ -74,14 +74,14 @@
 	{
 		"id": "013.jpg",
 		"tag": "Violin",
-		"image_search_term": "acoustic violin",
-		"hscodes": ["920510"]
+		"image_search_term": "violin",
+		"hscodes": ["920210"]
 	},
 	{
 		"id": "014.jpeg",
 		"tag": "Wooden chair",
-		"image_search_term": "wooden dining chair",
-		"hscodes": ["940330"]
+		"image_search_term": "wooden kitchen chair",
+		"hscodes": ["940340"]
 	},
 	{
 		"id": "015.avif",
@@ -93,21 +93,21 @@
 		"id": "018.jpeg",
 		"tag": "Solar panel",
 		"image_search_term": "photovoltaic solar panel",
-		"error_message": "Photovoltaic cells and modules have specific classification (8541), distinct from general electrical generators",
-		"hscodes": ["854140"]
+		"error_message": "Photovoltaic cells and modules have specific classification and are not considered electrical generators",
+		"hscodes": ["85414"]
 	},
 	{
 		"id": "019.jpg",
 		"tag": "Camera drone",
 		"image_search_term": "quadcopter camera drone",
-		"error_message": "Small consumer drones are typically classified as aircraft (8806), not toys (9503), even if used recreationally",
-		"hscodes": ["880690"]
+		"error_message": "Small consumer drones are typically classified as aircraft, not toys, even if used recreationally",
+		"hscodes": ["88069"]
 	},
 	{
 		"id": "020.webp",
 		"tag": "LED light bulb",
 		"image_search_term": "LED light bulb",
-		"error_message": "LED lamps have their own classification (8539), distinct from traditional incandescent or fluorescent bulbs",
-		"hscodes": ["853921"]
+		"error_message": "LED lamps have their own classification, distinct from traditional light bulbs",
+		"hscodes": ["85395"]
 	}
 ]
